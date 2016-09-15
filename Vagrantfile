@@ -2,7 +2,8 @@
 # vi: set ft=ruby :
 
 VAGRANTFILE_API_VERSION = "2"
-
+#Se establece la creacion para las siguientes maquinas:
+# centos_balancer / centos_web_1 / centos_web_2 / centos_database
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define :centos_balancer do |node|
     node.vm.box = "centos6.4"
