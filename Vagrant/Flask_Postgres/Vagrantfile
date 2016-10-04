@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+$provisioner = <<SCRIPT
+echo "#!/bin/bash
+function InstallPip {
+  if [ '$(which pip)' ]; then
+    echo '-- Already installed.'
+    return
+  fi
+  sudo yum install python -y
+  sudo yum install nano -y
+  sudo yum install python-psycopg2.i686 -y
+  curl -O https://bootstrap.pypa.io/get-pip.py
+  sudo python get-pip.py
+  rm get-pip.py
+}
+echo 'Installing Pip...'; InstallPip
+echo 'Installing Flask...'; pip install flask
+exit 0" | /bin/bash
+SCRIPT
+
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do|config|
+    config.vm.define :centos_flask do |node|
+    node.vm.box = "centos66"
+    node.vm.network :private_network, ip: "192.168.56.51"
+    node.vm.network "public_network", :bridge => "eth4", ip:"192.168.131.51", :auto_config => "false", :netmask => "255.255.255.0"
+    node.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024","--cpus", "2", "--name", "centos_flask" ]
+    end
+    config.vm.provision:chef_solo do |chef|
+      chef.cookbooks_path = "cookbooks"
+      #chef.add_recipe "mirror"
+      chef.add_recipe "flask"
+      chef.json = {"aptmirror" => {"server" => "192.168.131.254", "webip1" => "192.168.56.52", "webip2" => "192.168.56.53"}}
+    end 
+    node.vm.provision :shell, :inline => $provisioner # runs as root
+    
+  end
+  config.vm.define :centos_databases do |db|
+    db.vm.box = "centos66"
+    db.vm.network :private_network, ip: "192.168.56.54"
+    db.vm.network "public_network", :bridge => "eth4", ip:"192.168.131.54", :auto_config => "false", :netmask => "255.255.255.0"
+    db.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024","--cpus", "1", "--name", "centos_databases" ]
+    end
+    config.vm.provision :chef_solo do |chef|
+      chef.cookbooks_path = "cookbooks"
+      #chef.add_recipe "mirror"
+      chef.add_recipe "postgres"
+      chef.json = {"aptmirror" => {"server" => "192.168.131.254", "webip1" => "192.168.56.52", "webip2" => "192.168.56.53"}}    
+    end
+  end
+end

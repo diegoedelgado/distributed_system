@@ -1,0 +1,56 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$provisioner = <<SCRIPT
+echo "#!/bin/bash
+function InstallPip {
+  if [ '$(which pip)' ]; then
+    echo '-- Already installed.'
+    return
+  fi
+  sudo yum install python -y
+  sudo yum install python-psycopg2.i686 -y
+  curl -O https://bootstrap.pypa.io/get-pip.py
+  sudo python get-pip.py
+  rm get-pip.py
+}
+echo 'Installing Pip...'; InstallPip
+echo 'Installing Flask...'; pip install flask
+exit 0" | /bin/bash
+SCRIPT
+
+$greedy =<<SCRIPT
+import threading
+from flask import Flask
+app = Flask(__name__)
+
+def greedy():
+    x = 2
+    while(True):
+        x = x*3
+
+@app.route("/hi")
+def hi():
+    return "Hi!, I am a greedy algorithm"
+
+@app.route("/greedy")
+def test():
+    t1=threading.Thread(target=greedy,args=[])
+    t1.start()
+
+if __name__ == "__main__":
+    app.run('192.168.56.51', port=80)
+SCRIPT
+
+Vagrant.configure("2") do|config|
+    config.vm.define :centos_flask do |node|
+    node.vm.box = "centos64"
+    node.vm.network :private_network, ip: "192.168.56.51"
+    node.vm.network "public_network", :bridge => "eth4", ip:"192.168.131.51", :auto_config => "false", :netmask => "255.255.255.0"
+    node.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", "1024","--cpus", "2", "--name", "centos_flask" ]
+    end
+  node.vm.provision :shell, :inline => $provisioner # runs as root
+  #node.vm.provision :shell, :inline => $greedy 
+  end
+end
