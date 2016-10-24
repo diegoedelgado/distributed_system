@@ -25,7 +25,7 @@ cookbook_file "/home/vagrant/greedy.py" do
 	owner "vagrant"
 	group "wheel"
 end
-cookbook_file "/etc/init/micro_service.conf" do
+cookbook_file "/etc/init/service.conf" do
 	source "service.conf"
 	mode 0644
 	owner "root"
