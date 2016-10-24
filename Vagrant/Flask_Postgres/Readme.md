@@ -6,8 +6,7 @@ https://github.com/diegoedelgado/distributed_system/tree/master/Vagrant/Flask_Po
 Introducción
 A continuación, se expone la solución planteada para un esquema de aprovisionamiento como el presentado en la siguiente imagen:
 
-![alt text][[url=https://postimg.org/image/bki58ba4j/][img]https://s13.postimg.org/bki58ba4j/image.png[/img][/url]
-]
+<a href='https://postimg.org/image/bki58ba4j/' target='_blank'><img src='https://s13.postimg.org/bki58ba4j/image.png' border='0' alt="1"/></a><br/><br/>
 
  
 Se plantea la siguiente distribución para el desarrollo de este proyecto, se hará uso de la herramienta Vagrant y una serie de Cookbooks de chef. Inicialmente se mostrará la configuración del archivo Vagrantfile, posteriormente los cookbooks necesarios para el aprovisionamiento de un micro-Framework disponible para usar en el lenguaje Python llamado Flask, el cual nos servirá como puente entre el nodo de consulta y la base de datos, para esta última usaremos PostgresSQL como motor. Finalmente se mostrarán las recetas necesarias para el despliegue de la base de datos.
