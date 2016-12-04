@@ -1,0 +1,9 @@
+<h3>Data guardada</h3>
+    <table>
+    {%- for word in words %}
+        <tr>
+            <td>{{ word.id }}</td>
+            <td>{{ word.word }}</td>
+        </tr>
+    {%- endfor %}
+</table>

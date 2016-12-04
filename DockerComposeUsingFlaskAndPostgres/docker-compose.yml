@@ -1,0 +1,16 @@
+version: '2'
+services:
+  flask:
+    image: flask:latest
+    ports:
+      - "5000:5000"
+    links:
+      - postgres
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+
+  
