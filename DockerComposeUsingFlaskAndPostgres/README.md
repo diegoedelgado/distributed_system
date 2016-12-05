@@ -73,9 +73,10 @@ Este archivo contiene una lista de las dependencias del sistema necesarias para 
 
 Este script de python es quien permite la comunicación con la base de datos, inicialmente se encarga de levantar el servicio de consulta de la base de datos y luego de realizar la consulta. Para nuestro caso realiza la consulta sobre la dirección IP principal sobre la que corre docker en Windows 192.168.99.100 sobre el puerto 5432 definido como el de consulta a la base de datos. Se define el puerto 5000 como el puerto de escucha del servicio Web.
 Adicional a esto se define el proceso de consulta, para nuestro caso se ha definido un esquema REST, en el cual si se desea conocer la información almacenada en la base de datos se debe cargar la información de la siguiente forma:
-	-http://192.168.99.100:5000 : Si se desea conocer la información almancenada en la base de datos.
-	-http://192.168.99.100:5000/prueba : Si se desea agregar la frase “Funciona!” de forma estática a la base de datos.
-	-http://192.168.99.100:5000/____: Con cualquier otra combinación de palabra sobre la linea está será agregada directamente a la base de datos.
+
+-http://192.168.99.100:5000 : Si se desea conocer la información almancenada en la base de datos.
+-http://192.168.99.100:5000/prueba : Si se desea agregar la frase “Funciona!” de forma estática a la base de datos.
+-http://192.168.99.100:5000/____: Con cualquier otra combinación de palabra sobre la linea está será agregada directamente a la base de datos.
 
 
 ###data.html
@@ -106,7 +107,7 @@ Finalmente se realiza la construcción de la imagen:
 $ cd postgresBaseImage
 $ docker build -t postgres .
 ```
-![alt tag] (https://github.com/diegoedelgado/distributed_system/blob/master/DockerComposeUsingFlaskAndPostgres/images/DockerPostgres2.PNG)
+![alt tag] (https://github.com/diegoedelgado/distributed_system/blob/master/DockerComposeUsingFlaskAndPostgres/images/DockerPostgres1.PNG)
 
 ## 3. Aprovisionamiento usando Docker-compose
 Una vez definidas las imágenes para los contenedores que servirán como servicio web y base de datos, flask y postgres respectivamente procedemos a realizar el aprovisionamiento completo para este proyecto por medio de un docker-compose.yml, este archivo se describe a continuación:
